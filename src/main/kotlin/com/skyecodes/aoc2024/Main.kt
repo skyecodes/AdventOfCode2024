@@ -22,6 +22,7 @@ fun main(args: Array<String>) {
     require(args.isNotEmpty()) { "Day number required" }
     when (args[0].toInt()) {
         1 -> Day01
+        2 -> Day02
         else -> throw IllegalArgumentException("Invalid day number")
     }.run()
 }
