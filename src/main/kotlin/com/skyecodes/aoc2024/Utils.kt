@@ -1,16 +1,32 @@
 package com.skyecodes.aoc2024
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.concurrent.atomic.AtomicInteger
+
 fun <E> List<E>.removeAt(index: Int): List<E> = buildList(size - 1) {
     this@removeAt.forEachIndexed { i, e ->
         if (i != index) add(e)
     }
 }
 
-fun List<String>.toInt(): List<Int> = map { it.toInt() }
+fun Iterable<String>.toInt(): List<Int> = map { it.toInt() }
 
-fun List<String>.split(separator: String): List<List<String>> = map { it.split(separator) }
+fun Iterable<String>.split(separator: String): List<List<String>> = map { it.split(separator) }
 
-fun List<String>.splitToInt(separator: String): List<List<Int>> = map { it.split(separator).toInt() }
+fun Iterable<String>.splitToInt(separator: String): List<List<Int>> = map { it.split(separator).toInt() }
+
+fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Int = AtomicInteger().apply {
+    runBlocking(Dispatchers.Default) { forEach { launch { if (predicate(it)) incrementAndGet() } } }
+}.toInt()
+
+fun <T> Iterable<T>.filterAsync(predicate: (T) -> Boolean): List<T> = mapAsync { it to predicate(it) }.filter { it.second }.map { it.first }
+
+fun <T, E> Iterable<T>.mapAsync(mapper: (T) -> E): List<E> = runBlocking(Dispatchers.Default) { map { async { mapper(it) } }.awaitAll() }
 
 data class Point(val x: Int, val y: Int) {
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
