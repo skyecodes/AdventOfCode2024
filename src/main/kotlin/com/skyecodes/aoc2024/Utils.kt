@@ -1,12 +1,7 @@
 package com.skyecodes.aoc2024
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.*
+import java.util.concurrent.atomic.AtomicLong
 
 fun <E> List<E>.removeAt(index: Int): List<E> = buildList(size - 1) {
     this@removeAt.forEachIndexed { i, e ->
@@ -16,17 +11,25 @@ fun <E> List<E>.removeAt(index: Int): List<E> = buildList(size - 1) {
 
 fun Iterable<String>.toInt(): List<Int> = map { it.toInt() }
 
+fun Iterable<String>.toLong(): List<Long> = map { it.toLong() }
+
 fun Iterable<String>.split(separator: String): List<List<String>> = map { it.split(separator) }
 
 fun Iterable<String>.splitToInt(separator: String): List<List<Int>> = map { it.split(separator).toInt() }
 
-fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Int = AtomicInteger().apply {
+fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Long = AtomicLong().apply {
     runBlocking(Dispatchers.Default) { forEach { launch { if (predicate(it)) incrementAndGet() } } }
-}.toInt()
+}.toLong()
 
 fun <T> Iterable<T>.filterAsync(predicate: (T) -> Boolean): List<T> = mapAsync { it to predicate(it) }.filter { it.second }.map { it.first }
 
 fun <T, E> Iterable<T>.mapAsync(mapper: (T) -> E): List<E> = runBlocking(Dispatchers.Default) { map { async { mapper(it) } }.awaitAll() }
+
+fun <T> selfCartesianProduct(values: List<T>, times: Int): List<List<T>> =
+    typedCartesianProduct((0 until times).map { values })
+
+fun <T> typedCartesianProduct(lists: List<List<T>>): List<List<T>> =
+    lists.fold(listOf(listOf<T>())) { acc, set -> acc.flatMap { list -> set.map { element -> list + element } } }
 
 data class Point(val x: Int, val y: Int) {
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
