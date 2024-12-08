@@ -14,42 +14,38 @@ object Day06 : Day<Day06.Input>(6) {
                 }
             }
         }
-        val maxX = lines.maxOf { it.length }
-        val maxY = lines.size
-        return Input(walls, start!!, maxX, maxY)
+        return Input(walls, start!!, Point(lines[0].length, lines.size))
     }
 
-    val directions =
-        listOf(Direction.TOP_CENTER, Direction.CENTER_RIGHT, Direction.BOTTOM_CENTER, Direction.CENTER_LEFT)
-    private val part1cells = mutableSetOf<Point>()
+    private val visitedPos = mutableSetOf<Point>()
 
     override fun solvePart1(input: Input): Any {
         var currentDirIndex = 0
         var currentPos = input.start
-        while (currentPos.x in 0..input.maxX - 1 && currentPos.y in 0..input.maxY - 1) {
-            part1cells += currentPos
-            val newPos = currentPos + directions[currentDirIndex].offset
+        while (currentPos.withinBounds(input.max)) {
+            visitedPos += currentPos
+            val newPos = currentPos + Direction.Direct[currentDirIndex]
             if (newPos in input.walls) {
-                currentDirIndex = (currentDirIndex + 1) % directions.size
+                currentDirIndex = (currentDirIndex + 1) % Direction.Direct.size
             } else {
                 currentPos = newPos
             }
         }
-        return part1cells.size
+        return visitedPos.size
     }
 
-    override fun solvePart2(input: Input): Any = part1cells.filter { it != input.start  }.countAsync { (x, y) ->
+    override fun solvePart2(input: Input): Any = visitedPos.filter { it != input.start }.countAsync { (x, y) ->
         val walls = input.walls + Point(x, y)
-        val cells = mutableSetOf<PointWithDirection>()
+        val visitedPosWithDir = mutableSetOf<PointWithDirection>()
         var currentDirIndex = 0
         var currentPos = input.start
-        while (currentPos.x in 0..input.maxX - 1 && currentPos.y in 0..input.maxY - 1) {
-            val pointWithDirection = PointWithDirection(currentPos, directions[currentDirIndex])
-            if (pointWithDirection in cells) return@countAsync true
-            cells += pointWithDirection
-            val newPos = currentPos + directions[currentDirIndex].offset
+        while (currentPos.withinBounds(input.max)) {
+            val pointWithDirection = PointWithDirection(currentPos, Direction.Direct[currentDirIndex])
+            if (pointWithDirection in visitedPosWithDir) return@countAsync true
+            visitedPosWithDir += pointWithDirection
+            val newPos = currentPos + Direction.Direct[currentDirIndex]
             if (newPos in walls) {
-                currentDirIndex = (currentDirIndex + 1) % directions.size
+                currentDirIndex = (currentDirIndex + 1) % Direction.Direct.size
             } else {
                 currentPos = newPos
             }
@@ -60,12 +56,11 @@ object Day06 : Day<Day06.Input>(6) {
     data class Input(
         val walls: List<Point>,
         val start: Point,
-        val maxX: Int,
-        val maxY: Int
+        val max: Point
     )
 
     data class PointWithDirection(
         val point: Point,
-        val direction: Direction
+        val direction: Point
     )
 }

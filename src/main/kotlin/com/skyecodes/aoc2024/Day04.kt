@@ -6,9 +6,9 @@ object Day04 : SimpleDay(4) {
         input.indices.sumOf { y ->
             input[y].indices.sumOf { x ->
                 val pos = Point(x, y)
-                Direction.entries.count { dir ->
+                Direction.All.count { dir ->
                     WORD.indices.all { charIndex ->
-                        val offsetPos = pos + dir.offset * charIndex
+                        val offsetPos = pos + dir * charIndex
                         input.getOrNull(offsetPos.y)?.getOrNull(offsetPos.x) == WORD[charIndex]
                     }
                 }
@@ -21,9 +21,9 @@ object Day04 : SimpleDay(4) {
             input[y].indices.sumOf { x ->
                 val pos = Point(x, y)
                 if (input[y][x] == 'A') {
-                    Direction.diagonals.indices.count { diagIndex ->
+                    Direction.Diagonals.indices.count { diagIndex ->
                         DIAGONAL_LETTERS.indices.all { charIndex ->
-                            val offsetPos = pos + Direction.diagonals[(charIndex + diagIndex) % 4].offset
+                            val offsetPos = pos + Direction.Diagonals[(charIndex + diagIndex) % 4]
                             input.getOrNull(offsetPos.y)?.getOrNull(offsetPos.x) == DIAGONAL_LETTERS[charIndex]
                         }
                     }

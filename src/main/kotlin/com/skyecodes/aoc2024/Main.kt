@@ -28,6 +28,7 @@ fun main(args: Array<String>) {
         5 -> Day05
         6 -> Day06
         7 -> Day07
+        8 -> Day08
         else -> throw IllegalArgumentException("Invalid day number")
     }.run()
 }

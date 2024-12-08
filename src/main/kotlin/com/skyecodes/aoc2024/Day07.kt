@@ -13,7 +13,7 @@ object Day07 : Day<List<Equation>>(7) {
     override fun solvePart2(input: List<Equation>): Any = solve(input, operators + { a, b -> "$a$b".toLong() })
 
     private fun solve(input: List<Equation>, operators: List<Operator>): Long = input.filter { eq ->
-        selfCartesianProduct(operators, eq.numbers.size - 1).any { ops ->
+        generateCombinations(operators, eq.numbers.size - 1).any { ops ->
             eq.numbers.reduceIndexed { i, acc, num -> ops[i - 1](acc, num) } == eq.result
         }
     }.sumOf { it.result }
