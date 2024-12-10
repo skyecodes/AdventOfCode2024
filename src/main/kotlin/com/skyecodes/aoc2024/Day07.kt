@@ -4,7 +4,8 @@ import com.skyecodes.aoc2024.Day07.Equation
 
 object Day07 : Day<List<Equation>>(7) {
     override fun parseInput(): List<Equation> =
-        readLines().split(": ").map { (result, numbers) -> Equation(result.toLong(), numbers.split(" ").toLong()) }
+        readLines().split(": ")
+            .map { (result, numbers) -> Equation(result.toLong(), numbers.split(" ").toLong()) }
 
     private val operators = listOf<Operator>(Long::plus, Long::times)
 

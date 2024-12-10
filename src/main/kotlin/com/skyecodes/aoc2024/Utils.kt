@@ -13,9 +13,9 @@ fun Iterable<String>.toInt(): List<Int> = map { it.toInt() }
 
 fun Iterable<String>.toLong(): List<Long> = map { it.toLong() }
 
-fun Iterable<String>.split(separator: String): List<List<String>> = map { it.split(separator) }
+fun Iterable<String>.split(separator: String): Matrix<String> = map { it.split(separator) }
 
-fun Iterable<String>.splitToInt(separator: String): List<List<Int>> = map { it.split(separator).toInt() }
+fun Iterable<String>.splitToInt(separator: String): Matrix<Int> = map { it.split(separator).toInt() }
 
 fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Long = AtomicLong().apply {
     runBlocking(Dispatchers.Default) { forEach { launch { if (predicate(it)) incrementAndGet() } } }
@@ -36,6 +36,7 @@ data class Point(val x: Int, val y: Int) {
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
     operator fun times(scalar: Int) = Point(x * scalar, y * scalar)
     fun withinBounds(end: Point, start: Point = Zero) = x >= start.x && y >= start.y && x < end.x && y < end.y
+    val directSurroundings by lazy { Direction.Direct.map { this + it } }
 
     companion object {
         val Zero = Point(0, 0)
@@ -55,4 +56,16 @@ object Direction {
     val All = listOf(TopLeft, TopCenter, TopRight, CenterRight, BottomRight, BottomCenter, BottomLeft, CenterLeft)
     val Direct = listOf(TopCenter, CenterRight, BottomCenter, CenterLeft)
     val Diagonals = listOf(TopLeft, TopRight, BottomRight, BottomLeft)
+}
+
+typealias Matrix<T> = List<List<T>>
+
+operator fun <T> Matrix<T>.get(x: Int, y: Int): T? = getOrNull(y)?.getOrNull(x)
+
+operator fun <T> Matrix<T>.get(p: Point): T? = get(p.x, p.y)
+
+fun <T> Matrix<T>.findAll(value: T): List<Point> = flatMapIndexed { y, line ->
+    line.flatMapIndexed { x, v ->
+        if (v == value) listOf(Point(x, y)) else emptyList()
+    }
 }
