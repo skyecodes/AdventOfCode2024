@@ -1,37 +1,30 @@
 package com.skyecodes.aoc2024
 
-abstract class Day<T : Any>(private val num: Int, private val example: Boolean = false){
-    protected fun readLines(): List<String> = this::class.java.getResourceAsStream("/${if (example) "example" else "day"}%02d.txt".format(num))!!.bufferedReader().readLines()
-    protected abstract fun solvePart1(input: T): Any
-    protected abstract fun solvePart2(input: T): Any
-
-    protected abstract fun parseInput(): T
-
-    fun run() {
-        val input = parseInput()
-        println("Part 1: " + solvePart1(input))
-        println("Part 2: " + solvePart2(input))
+abstract class Day<T : Any>(val number: Int) {
+    val lines by lazy {
+        this::class.java.getResourceAsStream("/day%02d.txt".format(number))!!.bufferedReader().readLines()
     }
+
+    abstract fun parseInput(): T
+    abstract fun solvePart1(input: T): Number
+    abstract fun solvePart2(input: T): Number
+
+    fun run(): Result = parseInput().let { Result(solvePart1(it), solvePart2(it)) }
+
+    data class Result(val part1: Number, val part2: Number)
 }
 
-abstract class SimpleDay(num: Int, example: Boolean = false) : Day<List<String>>(num, example) {
-    override fun parseInput(): List<String> = readLines()
+abstract class SimpleDay(num: Int) : Day<List<String>>(num) {
+    override fun parseInput(): List<String> = lines
 }
+
+val days = listOf(Day01, Day02, Day03, Day04, Day05, Day06, Day07, Day08, Day09, Day10, Day11)
 
 fun main(args: Array<String>) {
     require(args.isNotEmpty()) { "Day number required" }
-    when (args[0].toInt()) {
-        1 -> Day01
-        2 -> Day02
-        3 -> Day03
-        4 -> Day04
-        5 -> Day05
-        6 -> Day06
-        7 -> Day07
-        8 -> Day08
-        9 -> Day09
-        10 -> Day10
-        11 -> Day11
-        else -> throw IllegalArgumentException("Invalid day number")
-    }.run()
+    val dayNumber = args[0].toInt()
+    val (part1, part2) = days.getOrNull(dayNumber - 1)?.run() ?: throw IllegalArgumentException("Invalid day number")
+    println("Day $dayNumber")
+    println("Part 1: $part1")
+    println("Part 2: $part2")
 }

@@ -3,18 +3,18 @@ package com.skyecodes.aoc2024
 import com.skyecodes.aoc2024.Day05.Input
 
 object Day05 : Day<Input>(5) {
-    override fun parseInput(): Input = readLines().partition { '|' in it }.let { (rules, updates) ->
+    override fun parseInput(): Input = lines.partition { '|' in it }.let { (rules, updates) ->
         Input(
             rules = rules.splitToInt("|").map { (a, b) -> a to b },
             updates = updates.filter { it.isNotEmpty() }.splitToInt(",")
         )
     }
 
-    override fun solvePart1(input: Input): Any = input.updates.filter { update ->
+    override fun solvePart1(input: Input): Number = input.updates.filter { update ->
         input.rules.filterInUpdate(update).all { (a, b) -> update.indexOf(a) < update.indexOf(b) }
     }.sumOfMiddle()
 
-    override fun solvePart2(input: Input): Any = input.updates.filter { update ->
+    override fun solvePart2(input: Input): Number = input.updates.filter { update ->
         input.rules.filterInUpdate(update).any { (a, b) -> update.indexOf(a) > update.indexOf(b) }
     }.map { update ->
         update.sortedWith { a, b ->

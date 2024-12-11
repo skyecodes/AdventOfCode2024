@@ -6,7 +6,7 @@ object Day09 : Day<List<Block>>(9) {
     override fun parseInput(): List<Block> {
         var isFile = true
         var fileId = 0
-        return readLines()[0].map { c ->
+        return lines[0].map { c ->
             c.digitToInt().let { if (isFile) Block.File(fileId, it) else Block.Empty(it) }.also {
                 if (isFile) fileId++
                 isFile = !isFile
@@ -14,7 +14,7 @@ object Day09 : Day<List<Block>>(9) {
         }
     }
 
-    override fun solvePart1(input: List<Block>): Any {
+    override fun solvePart1(input: List<Block>): Number {
         val list = input.toMutableList()
         while (list.any { it is Block.Empty }) {
             var block = list.removeLast()
@@ -44,7 +44,7 @@ object Day09 : Day<List<Block>>(9) {
         return getResult(list)
     }
 
-    override fun solvePart2(input: List<Block>): Any {
+    override fun solvePart2(input: List<Block>): Number {
         val list = input.toMutableList()
         for (index in list.indices.reversed()) {
             val block = list[index]

@@ -1,9 +1,9 @@
 package com.skyecodes.aoc2024
 
 object Day11 : Day<List<Long>>(11) {
-    override fun parseInput(): List<Long> = readLines()[0].split(" ").map { it.toLong() }
+    override fun parseInput(): List<Long> = lines[0].split(" ").map { it.toLong() }
 
-    override fun solvePart1(input: List<Long>): Any =
+    override fun solvePart1(input: List<Long>): Number =
         input.repeatMap(25) {
             flatMap {
                 val str = it.toString()
@@ -15,7 +15,7 @@ object Day11 : Day<List<Long>>(11) {
             }
         }.size
 
-    override fun solvePart2(input: List<Long>): Any =
+    override fun solvePart2(input: List<Long>): Number =
         input.groupingBy { it }.eachCount().mapValues { it.value.toLong() }.repeatMap(75) {
             map { (stone, count) ->
                 val str = stone.toString()

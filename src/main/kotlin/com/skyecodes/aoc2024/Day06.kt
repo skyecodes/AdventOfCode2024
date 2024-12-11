@@ -2,7 +2,6 @@ package com.skyecodes.aoc2024
 
 object Day06 : Day<Day06.Input>(6) {
     override fun parseInput(): Input {
-        val lines = readLines()
         var start: Point? = null
         val walls = buildList {
             lines.forEachIndexed { y, line ->
@@ -19,7 +18,7 @@ object Day06 : Day<Day06.Input>(6) {
 
     private val visitedPos = mutableSetOf<Point>()
 
-    override fun solvePart1(input: Input): Any {
+    override fun solvePart1(input: Input): Number {
         var currentDirIndex = 0
         var currentPos = input.start
         while (currentPos.withinBounds(input.max)) {
@@ -34,7 +33,7 @@ object Day06 : Day<Day06.Input>(6) {
         return visitedPos.size
     }
 
-    override fun solvePart2(input: Input): Any = visitedPos.filter { it != input.start }.countAsync { (x, y) ->
+    override fun solvePart2(input: Input): Number = visitedPos.filter { it != input.start }.countAsync { (x, y) ->
         val walls = input.walls + Point(x, y)
         val visitedPosWithDir = mutableSetOf<PointWithDirection>()
         var currentDirIndex = 0

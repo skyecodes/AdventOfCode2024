@@ -1,7 +1,7 @@
 package com.skyecodes.aoc2024
 
 import kotlinx.coroutines.*
-import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicInteger
 
 fun <E> List<E>.removeAt(index: Int): List<E> = buildList(size - 1) {
     this@removeAt.forEachIndexed { i, e ->
@@ -17,11 +17,17 @@ fun Iterable<String>.split(separator: String): Matrix<String> = map { it.split(s
 
 fun Iterable<String>.splitToInt(separator: String): Matrix<Int> = map { it.split(separator).toInt() }
 
-fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Long = AtomicLong().apply {
+fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Int = AtomicInteger().apply {
     runBlocking(Dispatchers.Default) { forEach { launch { if (predicate(it)) incrementAndGet() } } }
-}.toLong()
+}.get()
 
 fun <T> Iterable<T>.filterAsync(predicate: (T) -> Boolean): List<T> = mapAsync { it to predicate(it) }.filter { it.second }.map { it.first }
+
+fun <T> Iterable<T>.forEachAsync(action: (T) -> Unit) =
+    runBlocking(Dispatchers.Default) { map { launch { action(it) } }.joinAll() }
+
+fun <K, V> Map<out K, V>.forEachAsync(action: (Map.Entry<K, V>) -> Unit) =
+    runBlocking(Dispatchers.Default) { map { launch { action(it) } }.joinAll() }
 
 fun <T, E> Iterable<T>.mapAsync(mapper: (T) -> E): List<E> = runBlocking(Dispatchers.Default) { map { async { mapper(it) } }.awaitAll() }
 

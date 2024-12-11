@@ -3,7 +3,7 @@ package com.skyecodes.aoc2024
 import com.skyecodes.aoc2024.Day08.Input
 
 object Day08 : Day<Input>(8) {
-    override fun parseInput(): Input = readLines().let { lines ->
+    override fun parseInput(): Input = lines.let { lines ->
         Input(
             frequencies = lines.flatMapIndexed { y, line ->
                 line.mapIndexed { x, c -> Point(x, y) to c }.filter { (_, frequency) -> frequency.isLetterOrDigit() }
@@ -12,11 +12,11 @@ object Day08 : Day<Input>(8) {
         )
     }
 
-    override fun solvePart1(input: Input): Any = solve(input) { a, b ->
+    override fun solvePart1(input: Input): Number = solve(input) { a, b ->
         (a + a - b).let { if (it.withinBounds(input.max)) listOf(it) else emptyList() }
     }
 
-    override fun solvePart2(input: Input): Any = solve(input) { a, b ->
+    override fun solvePart2(input: Input): Number = solve(input) { a, b ->
         generateSequence(a) { it + a - b }.takeWhile { it.withinBounds(input.max) }.toList()
     }
 

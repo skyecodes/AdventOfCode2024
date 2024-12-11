@@ -4,14 +4,13 @@ import com.skyecodes.aoc2024.Day07.Equation
 
 object Day07 : Day<List<Equation>>(7) {
     override fun parseInput(): List<Equation> =
-        readLines().split(": ")
-            .map { (result, numbers) -> Equation(result.toLong(), numbers.split(" ").toLong()) }
+        lines.split(": ").map { (result, numbers) -> Equation(result.toLong(), numbers.split(" ").toLong()) }
 
     private val operators = listOf<Operator>(Long::plus, Long::times)
 
-    override fun solvePart1(input: List<Equation>): Any = solve(input, operators)
+    override fun solvePart1(input: List<Equation>): Number = solve(input, operators)
 
-    override fun solvePart2(input: List<Equation>): Any = solve(input, operators + { a, b -> "$a$b".toLong() })
+    override fun solvePart2(input: List<Equation>): Number = solve(input, operators + { a, b -> "$a$b".toLong() })
 
     private fun solve(input: List<Equation>, operators: List<Operator>): Long = input.filter { eq ->
         generateCombinations(operators, eq.numbers.size - 1).any { ops ->

@@ -3,11 +3,11 @@ package com.skyecodes.aoc2024
 import com.skyecodes.aoc2024.Day10.Input
 
 object Day10 : Day<Input>(10) {
-    override fun parseInput(): Input = readLines().map { it.map { it.digitToInt() } }.let { Input(it, it.findAll(0)) }
+    override fun parseInput(): Input = lines.map { it.map { it.digitToInt() } }.let { Input(it, it.findAll(0)) }
 
-    override fun solvePart1(input: Input): Any = solve(input) { mutableSetOf() }
+    override fun solvePart1(input: Input): Number = solve(input) { mutableSetOf() }
 
-    override fun solvePart2(input: Input): Any = solve(input) { mutableListOf() }
+    override fun solvePart2(input: Input): Number = solve(input) { mutableListOf() }
 
     private fun solve(input: Input, collec: () -> MutableCollection<Point>) =
         input.trailheads.sumOf { advance(input.map, it, 0, 9).toCollection(collec()).size }
