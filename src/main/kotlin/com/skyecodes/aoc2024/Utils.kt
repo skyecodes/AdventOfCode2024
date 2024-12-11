@@ -69,3 +69,11 @@ fun <T> Matrix<T>.findAll(value: T): List<Point> = flatMapIndexed { y, line ->
         if (v == value) listOf(Point(x, y)) else emptyList()
     }
 }
+
+fun <T : Any> T.repeatMap(times: Int, action: T.(Int) -> T): T {
+    var t = this
+    repeat(times) {
+        t = t.action(it)
+    }
+    return t
+}
