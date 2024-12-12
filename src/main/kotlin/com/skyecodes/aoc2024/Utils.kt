@@ -37,6 +37,14 @@ fun <T> generateCombinations(values: List<T>, times: Int): List<List<T>> =
 fun <T> generateCombinations(lists: List<List<T>>): List<List<T>> =
     lists.fold(listOf(listOf<T>())) { acc, set -> acc.flatMap { list -> set.map { element -> list + element } } }
 
+fun <T : Any> T.repeatMap(times: Int, action: T.(Int) -> T): T {
+    var t = this
+    repeat(times) {
+        t = t.action(it)
+    }
+    return t
+}
+
 data class Point(val x: Int, val y: Int) {
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
@@ -76,10 +84,8 @@ fun <T> Matrix<T>.findAll(value: T): List<Point> = flatMapIndexed { y, line ->
     }
 }
 
-fun <T : Any> T.repeatMap(times: Int, action: T.(Int) -> T): T {
-    var t = this
-    repeat(times) {
-        t = t.action(it)
+fun <T> Matrix<T>.forEachPoint(action: (Point, T) -> Unit) = forEachIndexed { y, line ->
+    line.forEachIndexed { x, v ->
+        action(Point(x, y), v)
     }
-    return t
 }
