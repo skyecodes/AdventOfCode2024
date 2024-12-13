@@ -89,3 +89,5 @@ fun <T> Matrix<T>.forEachPoint(action: (Point, T) -> Unit) = forEachIndexed { y,
         action(Point(x, y), v)
     }
 }
+
+operator fun <T> List<T>.component6() = get(5)
