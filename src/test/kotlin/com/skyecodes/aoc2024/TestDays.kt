@@ -18,13 +18,16 @@ class TestDays {
         Day11 to Day.Result(55312, 65601038650482),
         Day12 to Day.Result(1930, 1206),
         Day13 to Day.Result(480, 875318608908),
+        Day14 to Day.Result(12, 0),
     )
 
     @Test
-    fun testAll() = examples.forEachAsync { (day, expected) ->
-        day.run().let { actual ->
-            assertEquals(expected.part1.toLong(), actual.part1.toLong(), "Day ${day.number} part 1 is incorrect")
-            assertEquals(expected.part2.toLong(), actual.part2.toLong(), "Day ${day.number} part 2 is incorrect")
+    fun testAll() {
+        examples.forEachAsync { (day, expected) ->
+            day.runTest().let { actual ->
+                assertEquals(expected.part1.toLong(), actual.part1.toLong(), "Day ${day.number} part 1 is incorrect")
+                assertEquals(expected.part2.toLong(), actual.part2.toLong(), "Day ${day.number} part 2 is incorrect")
+            }
         }
     }
 }

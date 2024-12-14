@@ -48,8 +48,16 @@ fun <T : Any> T.repeatMap(times: Int, action: T.(Int) -> T): T {
 data class Point(val x: Int, val y: Int) {
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
+    operator fun div(other: Point) = Point(x / other.x, y / other.y)
+    operator fun rem(other: Point) = Point(x % other.x, y % other.y)
+    operator fun plus(scalar: Int) = Point(x + scalar, y + scalar)
     operator fun times(scalar: Int) = Point(x * scalar, y * scalar)
+    operator fun div(scalar: Int) = Point(x / scalar, y / scalar)
     fun withinBounds(end: Point, start: Point = Zero) = x >= start.x && y >= start.y && x < end.x && y < end.y
+    fun keepWithin(area: Point) = (this % area).let { (x, y) ->
+        Point(if (x < 0) area.x + x else x, if (y < 0) area.y + y else y)
+    }
+
     val directSurroundings by lazy { Direction.Direct.map { this + it } }
 
     companion object {
