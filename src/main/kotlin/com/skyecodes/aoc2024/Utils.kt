@@ -67,16 +67,16 @@ data class Point(val x: Int, val y: Int) {
 
 object Direction {
     val TopLeft = Point(-1, -1)
-    val TopCenter = Point(0, -1)
+    val Top = Point(0, -1)
     val TopRight = Point(1, -1)
-    val CenterRight = Point(1, 0)
+    val Right = Point(1, 0)
     val BottomRight = Point(1, 1)
-    val BottomCenter = Point(0, 1)
+    val Bottom = Point(0, 1)
     val BottomLeft = Point(-1, 1)
-    val CenterLeft = Point(-1, 0)
+    val Left = Point(-1, 0)
 
-    val All = listOf(TopLeft, TopCenter, TopRight, CenterRight, BottomRight, BottomCenter, BottomLeft, CenterLeft)
-    val Direct = listOf(TopCenter, CenterRight, BottomCenter, CenterLeft)
+    val All = listOf(TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left)
+    val Direct = listOf(Top, Right, Bottom, Left)
     val Diagonals = listOf(TopLeft, TopRight, BottomRight, BottomLeft)
 }
 

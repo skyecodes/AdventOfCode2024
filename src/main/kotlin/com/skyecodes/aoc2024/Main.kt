@@ -24,7 +24,10 @@ abstract class SimpleDay(num: Int) : Day<List<String>>(num) {
     override fun parseInput(): List<String> = lines
 }
 
-val days = listOf(Day01, Day02, Day03, Day04, Day05, Day06, Day07, Day08, Day09, Day10, Day11, Day12, Day13, Day14)
+val days = listOf(
+    Day01, Day02, Day03, Day04, Day05, Day06, Day07, Day08, Day09, Day10, Day11, Day12, Day13, Day14,
+    Day15
+)
 
 fun main(args: Array<String>) {
     require(args.isNotEmpty()) { "Day number required" }
