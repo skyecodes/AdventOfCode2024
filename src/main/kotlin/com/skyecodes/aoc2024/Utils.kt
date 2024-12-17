@@ -17,6 +17,8 @@ fun Iterable<String>.split(separator: String): Matrix<String> = map { it.split(s
 
 fun Iterable<String>.splitToInt(separator: String): Matrix<Int> = map { it.split(separator).toInt() }
 
+fun Iterable<String>.toCharMatrix(): Matrix<Char> = map { it.map { it } }
+
 fun <T> Iterable<T>.countAsync(predicate: (T) -> Boolean): Int = AtomicInteger().apply {
     runBlocking(Dispatchers.Default) { forEach { launch { if (predicate(it)) incrementAndGet() } } }
 }.get()
@@ -53,6 +55,7 @@ data class Point(val x: Int, val y: Int) {
     operator fun plus(scalar: Int) = Point(x + scalar, y + scalar)
     operator fun times(scalar: Int) = Point(x * scalar, y * scalar)
     operator fun div(scalar: Int) = Point(x / scalar, y / scalar)
+    operator fun unaryMinus() = Point(-x, -y)
     fun withinBounds(end: Point, start: Point = Zero) = x >= start.x && y >= start.y && x < end.x && y < end.y
     fun keepWithin(area: Point) = (this % area).let { (x, y) ->
         Point(if (x < 0) area.x + x else x, if (y < 0) area.y + y else y)
@@ -79,6 +82,11 @@ object Direction {
     val Direct = listOf(Top, Right, Bottom, Left)
     val Diagonals = listOf(TopLeft, TopRight, BottomRight, BottomLeft)
 }
+
+data class PointWithDirection(
+    val point: Point,
+    val direction: Point
+)
 
 typealias Matrix<T> = List<List<T>>
 

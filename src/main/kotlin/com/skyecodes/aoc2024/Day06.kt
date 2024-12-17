@@ -57,9 +57,4 @@ object Day06 : Day<Day06.Input>(6) {
         val start: Point,
         val max: Point
     )
-
-    data class PointWithDirection(
-        val point: Point,
-        val direction: Point
-    )
 }
