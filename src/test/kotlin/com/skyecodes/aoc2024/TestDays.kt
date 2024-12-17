@@ -22,6 +22,7 @@ class TestDays {
         Day15 to Day.Result(10092, 9021),
         Day16 to Day.Result(0, 0),
         Day17 to Day.Result("5,7,3,0", 117440),
+        Day18 to Day.Result(22, "6,1"),
     )
 
     @Test

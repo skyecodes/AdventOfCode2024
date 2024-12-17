@@ -2,6 +2,7 @@ package com.skyecodes.aoc2024
 
 import kotlinx.coroutines.*
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.abs
 
 fun <E> List<E>.removeAt(index: Int): List<E> = buildList(size - 1) {
     this@removeAt.forEachIndexed { i, e ->
@@ -57,6 +58,8 @@ data class Point(val x: Int, val y: Int) {
     operator fun div(scalar: Int) = Point(x / scalar, y / scalar)
     operator fun unaryMinus() = Point(-x, -y)
     fun withinBounds(end: Point, start: Point = Zero) = x >= start.x && y >= start.y && x < end.x && y < end.y
+    fun withinBoundsInclusive(end: Point, start: Point = Zero) =
+        x >= start.x && y >= start.y && x <= end.x && y <= end.y
     fun keepWithin(area: Point) = (this % area).let { (x, y) ->
         Point(if (x < 0) area.x + x else x, if (y < 0) area.y + y else y)
     }
@@ -87,6 +90,8 @@ data class PointWithDirection(
     val point: Point,
     val direction: Point
 )
+
+fun manhattan(a: Point, b: Point) = abs(a.x - b.x) + abs(a.y - b.y)
 
 typealias Matrix<T> = List<List<T>>
 
